@@ -1,4 +1,4 @@
-import Hello from './Hello'
+import Main from './Main'
 
 const counter = {
   path: 'counter',
@@ -8,15 +8,22 @@ const counter = {
   }
 }
 
+const staff = {
+  path: 'staff',
+  getComponent(location, cb) {
+    require.ensure([], require => cb(null, require('./Staff').default), 'staff')
+  }
+}
+
 export default {
   path: '/home',
-  name: 'Home',
+  component: Main,
   childRoutes: [
     {
-      name: 'Hello',
-      component: Hello,
+      component: Main,
       isIndex: true
     },
-    counter
+    counter,
+    staff
   ]
 }

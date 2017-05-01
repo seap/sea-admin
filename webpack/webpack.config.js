@@ -41,7 +41,10 @@ module.exports = {
     ],
     alias: {
       'src': path.resolve(__dirname, '../src'),
-      'components': path.resolve(__dirname, '../src/components')
+      'components': path.resolve(__dirname, '../src/components'),
+      'constants': path.resolve(__dirname, '../src/constants'),
+      'common': path.resolve(__dirname, '../src/common'),
+      'features': path.resolve(__dirname, '../src/features')
     }
   },
   plugins: require('./webpack.plugins')(isDev),
