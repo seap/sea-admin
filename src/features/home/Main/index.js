@@ -39,7 +39,7 @@ class Main extends Component {
             <Icon type="user" />员工管理
           </Menu.Item>
           <Menu.Item key="task">
-            <Icon type="appstore" />任务管理
+            <Icon type="appstore" />流程管理
           </Menu.Item>
           <Menu.Item key="setting">
             <Icon type="setting" />系统设置
