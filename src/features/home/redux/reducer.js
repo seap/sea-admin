@@ -1,11 +1,10 @@
-import { reducer as counter } from './counter'
-
-const initialState = {
-  number: 1
-}
+import { reducer as organization } from './organization'
+import { reducer as department } from './department'
+import initialState from './initialState'
 
 const reducers = [
-  counter
+  organization,
+  department
 ]
 
 export default function reducer(state = initialState, action) {

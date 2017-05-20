@@ -2,28 +2,15 @@ const path = require('path')
 const webpack = require('webpack')
 const devServer = require('./webpack.server')
 const { assetDirectory, publicPath } = require('../config')
-
+const { vendor, main } = require('./webpack.entrys')
 const isDev = process.env.NODE_ENV !== 'production'
 
 module.exports = {
   context: path.resolve(__dirname, '../src'),
   devtool: isDev ? 'cheap-module-eval-source-map' : '',
-  entry: {
-    main: isDev ? ['react-hot-loader/patch', 'main.js'] : ['main.js'],
-    vendor: [
-      'babel-polyfill',
-      'react',
-      'react-dom',
-      'react-router',
-      'redux',
-      'react-redux',
-      'redux-thunk',
-      'react-router-redux',
-      'isomorphic-fetch',
-      'js-cookie',
-      'antd'
-    ]
-  },
+  entry: isDev
+    ? { main: ['react-hot-loader/patch', ...main] }
+    : { main, vendor },
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: isDev ? '/' : publicPath,

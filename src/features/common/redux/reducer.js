@@ -1,11 +1,6 @@
 import { reducer as message } from './message'
 import { reducer as fetching } from './fetching'
-
-const initialState = {
-  code: 0,
-  message: '',
-  fetching: false
-}
+import initialState from './initialState'
 
 const reducers = [
   message,

@@ -15,15 +15,31 @@ const staff = {
   }
 }
 
+const department = {
+  path: 'department',
+  getComponent(location, cb) {
+    require.ensure([], require => cb(null, require('./Department').default), 'department')
+  }
+}
+
+const organization = {
+  path: 'organization',
+  getComponent(location, cb) {
+    require.ensure([], require => cb(null, require('./Organization').default), 'organization')
+  }
+}
+
 export default {
   path: '/home',
   component: Main,
   childRoutes: [
     {
-      component: Main,
+      component: department,
       isIndex: true
     },
     counter,
-    staff
+    staff,
+    department,
+    organization
   ]
 }

@@ -2,7 +2,7 @@ const path = require('path')
 const { port } = require('../config')
 
 module.exports = {
-  contentBase: path.join(__dirname, "lib"),
+  contentBase: path.join(__dirname, '../lib'),
   historyApiFallback: true,
   disableHostCheck: true,
   port: port || 3000,

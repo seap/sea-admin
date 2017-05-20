@@ -1,4 +1,4 @@
-import { sendMessage } from '../features/common/redux/actions'
+import { showMessage } from '../features/common/redux/actions'
 
 export default function api({ dispatch, getState }) {
   return next => async action => {
@@ -27,7 +27,7 @@ export default function api({ dispatch, getState }) {
       return
     }
 
-    const [requestType, successType, failureType] = types
+    const [successType, requestType, failureType] = types
     const [errorMessage, successMessage] = messages
 
     if (typeof requestType === 'function') {
@@ -43,21 +43,21 @@ export default function api({ dispatch, getState }) {
         if (typeof successType === 'function') {
           return successType(dispatch, getState, json)
         } else {
-          successMessage && dispatch(sendMessage(successMessage))
-          dispatch({ ...rest, type: successType, data: json.data })
+          successMessage && dispatch(showMessage(successMessage, 'success', 0))
+          dispatch({ ...rest, type: successType, payload: json.data })
         }
       } else {
         if (typeof failureType === 'function') {
           failureType(dispatch, getState, json)
         } else {
-          dispatch(sendMessage(errorMessage || json.errmsg, json.errno))
+          dispatch(showMessage(errorMessage || json.msg, 'error', json.code))
           dispatch({ ...rest, type: failureType })
         }
       }
     } catch (e) {
       console.log(e)
       dispatch({ ...rest, type: failureType })
-      dispatch(sendMessage('服务异常, 请稍后再试!'))
+      dispatch(showMessage('服务异常, 请稍后再试!', 'error', 9999))
     }
   }
 }

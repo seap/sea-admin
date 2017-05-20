@@ -1,40 +1,34 @@
+import Immutable from 'seamless-immutable'
 import {
-  MESSAGE_SEND,
-  MESSAGE_CONFIRMATION
+  MESSAGE_SHOW,
+  MESSAGE_RESET
 } from './actionTypes'
 
-export function sendMessage(message = '服务异常,请稍后再试!', code = 9999) {
+export function showMessage(message = '服务异常,请稍后再试!', category = 'info', code = 9999) {
   return {
-    type: MESSAGE_SEND,
+    type: MESSAGE_SHOW,
     payload: {
       code,
-      message
+      message,
+      category
     }
   }
 }
 
-export function confirmMessage() {
+export function resetMessage() {
   return {
-    type: MESSAGE_CONFIRMATION
+    type: MESSAGE_RESET
   }
 }
 
 export function reducer(state, action) {
   switch (action.type) {
-    case MESSAGE_SEND:
-      const { code, message } = action.payload
-      return {
-        ...state,
-        code,
-        message
-      }
+    case MESSAGE_SHOW:
+      return Immutable.merge(state, action.payload)
 
-    case MESSAGE_CONFIRMATION:
-      return {
-        ...state,
-        code: 0,
-        message: ''
-      }
+    case MESSAGE_RESET:
+      return Immutable.merge(state, { code: 0, message: '', category: '' })
+
     default:
       return state
   }

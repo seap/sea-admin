@@ -1,2 +1,2 @@
-export { sendMessage, confirmMessage } from './message'
+export { showMessage, resetMessage } from './message'
 export { requestStart, requestEnd } from './fetching'

@@ -1,6 +1,5 @@
 // action types
-export const MESSAGE_SEND = 'MESSAGE_SEND'
-export const MESSAGE_CONFIRMATION = 'MESSAGE_CONFIRMATION'
+export const MESSAGE_SHOW = 'MESSAGE_SHOW'
 export const MESSAGE_RESET = 'MESSAGE_RESET'
 
 export const REQUEST_START = 'REQUEST_START'

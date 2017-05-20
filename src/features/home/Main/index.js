@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-import * as actions from '../redux/actions'
+import { menuSwitch } from '../redux/actions'
 import styles from './main.scss'
 
 import { Button, Menu, Icon, Row, Col } from 'antd';
@@ -17,9 +17,11 @@ class Main extends Component {
   }
 
   handleClick = (e) => {
-    console.log('click ', e);
+    const { menuSwitch } = this.props
     this.setState({
       current: e.key,
+    }, () => {
+      menuSwitch(e.key)
     })
   }
 
@@ -41,9 +43,12 @@ class Main extends Component {
           <Menu.Item key="task">
             <Icon type="appstore" />流程管理
           </Menu.Item>
-          <Menu.Item key="setting">
-            <Icon type="setting" />系统设置
-          </Menu.Item>
+          
+          <SubMenu title={<span><Icon type="setting" />系统设置</span>}>
+            <Menu.Item key="organization">机构设置</Menu.Item>
+            <Menu.Item key="department">部门设置</Menu.Item>
+            <Menu.Item key="staff">人员设置</Menu.Item>
+          </SubMenu>
         </Menu>
         <div className={styles.status}>
           <Button icon="logout" size="small">小明</Button>
@@ -71,11 +76,8 @@ class Main extends Component {
   }
 }
 
-export default Main
-//
-// const mapStateToProps = state => ({ common:state.common, home: state.home })
-// const mapDispatchToProps = dispatch => ({
-//   actions: bindActionCreators({ ...actions }, dispatch)
-// })
-//
-// export default connect(mapStateToProps, mapDispatchToProps)(Hello)
+// const mapStateToProps = state => ({ common: state.common })
+const mapDispatchToProps = dispatch => ({
+  menuSwitch: bindActionCreators(menuSwitch, dispatch)
+})
+export default connect(null, mapDispatchToProps)(Main)

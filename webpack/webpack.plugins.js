@@ -10,41 +10,44 @@ module.exports = isDev => {
   // common plugins
   const commonPlugins = [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(isDev ? 'development' : 'production')
+     'process.env.NODE_ENV': JSON.stringify(isDev ? 'development' : 'production')
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../src/index.html'),
-      path: path.resolve(__dirname, '../dist'),
-      filename: 'index.html'
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-      // filename: 'vendor.[hash:8].js',
+     template: path.resolve(__dirname, isDev ? '../lib/index.html' : '../src/index.html'),
+     path: path.resolve(__dirname, '../dist'),
+     filename: 'index.html'
     }),
     new webpack.LoaderOptionsPlugin({
-      options: {
-        postcss: [
-          autoprefixer({
-            browsers: [
-              'ios >= 8',
-              'ie >= 10'
-            ]
-          })
-        ],
-        context: path.resolve(__dirname, '../src')
-      },
+     options: {
+       postcss: [
+         autoprefixer({
+           browsers: [
+             'ios >= 8',
+             'ie >= 10'
+           ]
+         })
+       ],
+       context: path.resolve(__dirname, '../src')
+     }
     })
   ]
 
   // development plugins
   const devPlugins = [
     new webpack.HotModuleReplacementPlugin(),
-    new DashboardPlugin()
+    new DashboardPlugin(),
+    new webpack.DllReferencePlugin({
+      context: path.resolve(__dirname, '../src'),
+      manifest: require('../lib/vendor.manifest.json')
+    })
   ]
 
   // production plugins
   const prdPlugins = [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: Infinity
+    }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
