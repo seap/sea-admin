@@ -13,6 +13,9 @@ import {
   DEPARTMENT_DELETE_REQUEST,
   DEPARTMENT_DELETE_SUCCESS,
   DEPARTMENT_DELETE_FAILURE,
+  DEPARTMENT_STATUS_REQUEST,
+  DEPARTMENT_STATUS_SUCCESS,
+  DEPARTMENT_STATUS_FAILURE,
   DEPARTMENT_EDITOR_OPEN,
   DEPARTMENT_EDITOR_CLOSE  
 } from './actionTypes'
@@ -47,6 +50,17 @@ export function updateDepartment(doc) {
     callAPI: () => fetch(`${API_DEPARTMEMT}/${doc.id}`, {
       method: 'PUT',
       body: JSON.stringify(doc)
+    })
+  }
+}
+
+// 修改部门状态
+export function updateDepartmentStatus(id, status) {
+  return {
+    types: [DEPARTMENT_STATUS_SUCCESS, DEPARTMENT_STATUS_REQUEST, DEPARTMENT_STATUS_FAILURE],
+    messages: ['状态设置失败', '状态设置成功!'],
+    callAPI: () => fetch(`${API_DEPARTMEMT}/${id}/${status}`, {
+      method: 'PUT'
     })
   }
 }
@@ -113,13 +127,14 @@ export function reducer(state, action) {
       })
     }
 
+    case DEPARTMENT_STATUS_SUCCESS:
     case DEPARTMENT_UPDATE_SUCCESS: {
       return Immutable.update(state, 'department', department => {
         department = Immutable.merge(department, { isDetailFetching: false, isEditing: false })
         department = Immutable.updateIn(department, ['list'], list => {
           return Immutable.flatMap(list, data => {
             if (data.id === payload.id) {
-              return payload
+              return Immutable.merge(data, payload)
             } else {
               return data
             }

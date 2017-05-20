@@ -35,13 +35,18 @@ export default [
     key: 'telephone'
   },
   {
+    title: '备注',
+    dataIndex: 'remark',
+    key: 'remark'
+  },
+  {
     title: '状态',
     dataIndex: 'status',
     key: 'status',
     render: text => (
       text == '0' 
       ? <span><Badge status="success" />有效</span>
-      : <span><Badge status="error" />封存</span>
+      : <span><Badge status="error" />失效</span>
     )
   }
 ]

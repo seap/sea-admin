@@ -29,6 +29,20 @@ const organization = {
   }
 }
 
+const position = {
+  path: 'position',
+  getComponent(location, cb) {
+    require.ensure([], require => cb(null, require('./Position').default), 'position')
+  }
+}
+
+const role = {
+  path: 'role',
+  getComponent(location, cb) {
+    require.ensure([], require => cb(null, require('./Role').default), 'role')
+  }
+}
+
 export default {
   path: '/home',
   component: Main,
@@ -40,6 +54,8 @@ export default {
     counter,
     staff,
     department,
-    organization
+    position,
+    role,
+    organization,
   ]
 }

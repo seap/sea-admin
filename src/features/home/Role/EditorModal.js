@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Modal, Input, Select } from 'antd'
-import { organizationTypeList } from './columns'
 
 // 创建或修改表单布局
 const formItemLayout = {
@@ -35,7 +34,7 @@ class EditorModal extends Component {
 
     return (
       <Modal
-        title={data.id ? '编辑机构' : '创建机构'}
+        title={data.id ? '编辑角色' : '创建角色'}
         maskClosable={false}
         visible={visible}
         confirmLoading={loading}
@@ -43,39 +42,15 @@ class EditorModal extends Component {
         onCancel={onCancel}
       >
         <Form>
-          <Form.Item {...formItemLayout} label="机构名称" >
+          <Form.Item {...formItemLayout} label="角色名称" >
             {
               getFieldDecorator('name', {
                 initialValue: data.name || '',
-                rules: [{ required: true, message: '请输入机构名称!' }]
-              })(<Input placeholder="机构名称" style={{ width: '80%' }} />)
+                rules: [{ required: true, message: '请输入角色名称!' }]
+              })(<Input placeholder="角色名称" disabled={data.deptCode ? true : false} style={{ width: '80%' }} />)
             }
           </Form.Item>
-          <Form.Item {...formItemLayout} label="机构类型" >
-            {
-              getFieldDecorator('type', {
-                initialValue: data.type || '0'
-              })(<Select style={{ width: '80%' }} >
-                  {organizationTypeList.map((opt, index) => <Select.Option key={opt.key} value={opt.key}>{opt.value}</Select.Option>)}
-                </Select>)
-            }
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="负责人" >
-            {
-              getFieldDecorator('owner', {
-                initialValue: data.owner || '',
-                rules: [{ required: true, message: '请输入负责人姓名!' }]
-              })(<Input placeholder="如：张小白" style={{ width: '80%' }} />)
-            }
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="电话" >
-            {
-              getFieldDecorator('telephone', {
-                initialValue: data.telephone || '',
-                rules: [{ required: true, pattern: /^1\d{10}$/, message: '请输入正确的手机号!' }]
-              })(<Input placeholder="电话号码" style={{ width: '80%' }} maxLength="11" />)
-            }
-          </Form.Item>
+          
           <Form.Item {...formItemLayout} label="备注" >
             {
               getFieldDecorator('remark', {

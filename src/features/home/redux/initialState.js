@@ -12,5 +12,17 @@ export default Immutable({
     isDetailFetching: false,
     isEditing: false,
     list: []
+  },
+  position: {
+    isListFetching: false,
+    isDetailFetching: false,
+    isEditing: false,
+    list: []
+  },
+  role: {
+    isListFetching: false,
+    isDetailFetching: false,
+    isEditing: false,
+    list: []
   }
 })

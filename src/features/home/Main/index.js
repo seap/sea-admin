@@ -47,6 +47,8 @@ class Main extends Component {
           <SubMenu title={<span><Icon type="setting" />系统设置</span>}>
             <Menu.Item key="organization">机构设置</Menu.Item>
             <Menu.Item key="department">部门设置</Menu.Item>
+            <Menu.Item key="position">职务设置</Menu.Item>
+            <Menu.Item key="role">角色设置</Menu.Item>
             <Menu.Item key="staff">人员设置</Menu.Item>
           </SubMenu>
         </Menu>

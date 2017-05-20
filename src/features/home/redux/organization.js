@@ -23,7 +23,7 @@ import {
   API_ORGANIZATION
 } from 'constants/api'
 
-// 获取部门列表
+// 获取机构列表
 export function fetchOrganization() {
   return {
     types: [ORGANIZATION_LIST_SUCCESS, ORGANIZATION_LIST_REQUEST, ORGANIZATION_LIST_FAILURE],
@@ -66,7 +66,7 @@ export function updateOrganizationStatus(id, status) {
   }
 }
 
-// 删除部门
+// 删除机构
 export function deleteOrganization(id) {
   console.log()
   return {
@@ -93,7 +93,7 @@ export function closeOrganizationEditor() {
 export function reducer(state, action) {
   const { type, payload } = action
   switch (type) {
-    // 部门列表
+    // 机构列表
     case ORGANIZATION_LIST_REQUEST:
       return Immutable.setIn(state, ['organization', 'isListFetching'], true)
     case ORGANIZATION_LIST_SUCCESS: {
