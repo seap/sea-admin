@@ -44,6 +44,19 @@ export function createDepartment(doc) {
   }
 }
 
+// 插入子部门
+export function insertChildDepartment(doc, parentCode) {
+  console.log('doc: ', doc)
+  return {
+    types: [DEPARTMENT_CREATE_SUCCESS, DEPARTMENT_CREATE_REQUEST, DEPARTMENT_CREATE_FAILURE],
+    messages: ['', '插入成功!'],
+    callAPI: () => fetch(`${API_DEPARTMEMT}/${parentCode}`, {
+      method: 'POST',
+      body: JSON.stringify(doc)
+    })
+  }
+}
+
 export function updateDepartment(doc) {
   return {
     types: [DEPARTMENT_UPDATE_SUCCESS, DEPARTMENT_UPDATE_REQUEST, DEPARTMENT_UPDATE_FAILURE],

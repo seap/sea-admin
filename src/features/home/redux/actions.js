@@ -12,7 +12,8 @@ export {
 } from './organization'
 export { 
   fetchDepartment, 
-  createDepartment, 
+  createDepartment,
+  insertChildDepartment,
   updateDepartment, 
   updateDepartmentStatus,
   deleteDepartment, 

@@ -9,12 +9,34 @@ import * as actions from '../redux/actions'
 import EditorModal from './EditorModal'
 import SearchBar from './SearchBar'
 
+// 递归出部门层级
+function generateDepartments(rawList, departments, level) {
+  for (let dept of departments) {
+    dept.children = rawList.filter(ele => ele.parentId == dept._id)
+    if (level < 5) {
+      generateDepartments(rawList, dept.children, level + 1)
+    }
+  }
+}
+
+// 状态过滤
+function filterDepartments(departments, status) {
+  departments = departments.filter(data => data.status == status)
+  for (let dept of departments) {
+    if (dept.children && dept.children.length > 0) {
+       dept.children = filterDepartments(dept.children, status)
+    }
+  }
+  return departments
+}
+
 class Department extends Component {
   constructor(props) {
     super(props)
     this.state = {
       status: '0' //默认显示有效数据
     }
+    this.departments = []
   }
   
   componentDidMount() {
@@ -23,10 +45,17 @@ class Department extends Component {
     fetchDepartment()
   }
 
+  componentWillReceiveProps(nextProps) {
+    const rawList = Immutable.asMutable(nextProps.home.department.list, { deep: true })
+    this.departments = rawList.filter(ele => ele.parentId == '')
+    generateDepartments(rawList, this.departments, 0)
+  }
+
   // 创建或编辑
-  handleEdit = record => {
+  handleEdit = (record, insertChild) => {
     const { openDepartmentEditor } = this.props
     this.department = record || {}
+    this.insertChild = insertChild
     openDepartmentEditor()
   }
 
@@ -65,6 +94,7 @@ class Department extends Component {
     return (
       <EditorModal
         data={this.department}
+        insertChild={this.insertChild}
         organizations={organizations}
         loading={isDetailFetching}
         visible={isEditing}
@@ -77,11 +107,6 @@ class Department extends Component {
   renderTable() {
     const { list: organizations } = this.props.home.organization
     const columns = [
-      {
-        title: '部门编号',
-        dataIndex: 'code',
-        key: 'code'
-      },
       {
         title: '部门名称',
         dataIndex: 'name',
@@ -131,7 +156,7 @@ class Department extends Component {
             <Icon type="edit"/>编辑
           </a>
           <span className="ant-divider" />
-          <a onClick={() => {}} >
+          <a onClick={() => this.handleEdit(record, true)} >
             <Icon type="select"/>添加子部门
           </a>
           <span className="ant-divider" />
@@ -168,17 +193,21 @@ class Department extends Component {
       )
     }
     const { status } = this.state
-    const dataSource = Immutable.asMutable(this.props.home.department.list, { deep: true })
-      .filter(data => status === '' || data.status === status )
-    console.log(dataSource)
+    // 动态过滤状态
+    let dataSource = this.departments
+    if (status !== '') {
+      dataSource = filterDepartments(_.cloneDeep(this.departments), status)
+    }
     return (
       <Table
         size="middle"
         bordered={true}
+        defaultExpandAllRows={true}
         loading={this.props.home.department.isListFetching}
         columns={ [...columns, operationColumn] }
         dataSource={dataSource}
         rowKey={record => record.id}
+        footer={() => <span><Icon type="question-circle-o" /> 部门层级请配置在七层以内</span>}
       />
     )
   }
@@ -190,7 +219,7 @@ class Department extends Component {
         extra={<Button type="primary" icon="plus" onClick={() => this.handleEdit()}>创建</Button>}
       >
         <SearchBar onSearch={this.handleSearch} />
-        {this.renderTable()}
+        {this.departments.length > 0 && this.renderTable()}
         {this.renderModal()}
       </Card>
     )

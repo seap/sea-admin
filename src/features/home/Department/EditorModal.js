@@ -17,24 +17,28 @@ class EditorModal extends Component {
   }
 
   handleFormOk = () => {
-    const { onSubmit, data } = this.props
+    const { onSubmit, data = {}, insertChild } = this.props
     const { validateFields } = this.props.form
     validateFields((errors, values) => {
       if (errors) { // 验证失败
         console.log('Errors in form')
         return;
       }
-      onSubmit({...data, ...values})
+      if (insertChild) {
+        onSubmit({ parentId: data._id, ...values })
+      } else {
+        onSubmit({ parentId: '', ...data, ...values})
+      }
     })
   }
 
   render() {
-    const { visible, loading, data = {}, organizations = [], onCancel } = this.props
+    const { visible, loading, data = {}, insertChild, organizations = [], onCancel } = this.props
     const { getFieldDecorator, getFieldValue } = this.props.form
 
     return (
       <Modal
-        title={data.id ? '编辑部门' : '创建部门'}
+        title={insertChild ? '插入子部门' : (data.id ? '编辑部门' : '创建部门')}
         maskClosable={false}
         visible={visible}
         confirmLoading={loading}
@@ -42,18 +46,28 @@ class EditorModal extends Component {
         onCancel={onCancel}
       >
         <Form>
-          <Form.Item {...formItemLayout} label="部门编号" >
-            {
-              getFieldDecorator('code', {
-                initialValue: data.code || '',
-                rules: [{ required: true, message: '请输入部门编号!' }]
-              })(<Input placeholder="如：001" disabled={data.code ? true : false} style={{ width: '80%' }} />)
-            }
-          </Form.Item>
+          {!insertChild && data._id &&
+            <Form.Item {...formItemLayout} label="部门编号" >
+              {
+                getFieldDecorator('_id', {
+                  initialValue: data._id || ''
+                })(<Input disabled={true} style={{ width: '80%' }} />)
+              }
+            </Form.Item>
+          }
+          {insertChild &&
+            <Form.Item {...formItemLayout} label="上级部门" >
+              {
+                getFieldDecorator('parentName', {
+                  initialValue: data.name
+                })(<Input disabled={true} style={{ width: '80%' }} />)
+              }
+            </Form.Item>
+          }
           <Form.Item {...formItemLayout} label="部门名称" >
             {
               getFieldDecorator('name', {
-                initialValue: data.name || '',
+                initialValue: insertChild ? '' : (data.name || ''),
                 rules: [{ required: true, message: '请输入部门名称!' }]
               })(<Input placeholder="如：业务部" style={{ width: '80%' }} />)
             }
@@ -62,7 +76,7 @@ class EditorModal extends Component {
             {
               getFieldDecorator('organization', {
                 initialValue: data.organization || ''
-              })(<Select style={{ width: '80%' }} >
+              })(<Select style={{ width: '80%' }}>
                   {organizations
                   .filter(ele => ele.status === '0')
                   .map((ele, index) => <Select.Option key={ele._id} value={ele._id}>{ele.name}</Select.Option>)}
@@ -72,15 +86,15 @@ class EditorModal extends Component {
           <Form.Item {...formItemLayout} label="负责人" >
             {
               getFieldDecorator('owner', {
-                initialValue: data.owner || '',
+                initialValue: insertChild ? '' : (data.owner || ''),
                 rules: [{ required: true, message: '请输入负责人姓名!' }]
-              })(<Input placeholder="如：张小白" style={{ width: '80%' }} />)
+              })(<Input placeholder="负责人姓名" style={{ width: '80%' }} />)
             }
           </Form.Item>
           <Form.Item {...formItemLayout} label="备注" >
             {
               getFieldDecorator('remark', {
-                initialValue: data.remark || ''
+                initialValue: insertChild ? '' : (data.remark || '')
               })(<Input placeholder="备注内容" style={{ width: '80%' }} />)
             }
           </Form.Item>
