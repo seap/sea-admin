@@ -38,7 +38,15 @@ export {
   openRoleEditor,
   closeRoleEditor 
 } from './role'
-
+export { 
+  fetchStaff,
+  createStaff, 
+  updateStaff,
+  updateStaffStatus,
+  deleteStaff,
+  openStaffEditor,
+  closeStaffEditor 
+} from './staff'
 export function menuSwitch(key) {
   return dispatch => dispatch(push(`/home/${key}`))
 }

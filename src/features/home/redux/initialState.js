@@ -24,5 +24,11 @@ export default Immutable({
     isDetailFetching: false,
     isEditing: false,
     list: []
+  },
+  staff: {
+    isListFetching: false,
+    isDetailFetching: false,
+    isEditing: false,
+    list: []
   }
 })

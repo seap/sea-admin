@@ -1,13 +1,5 @@
 import Main from './Main'
 
-const counter = {
-  path: 'counter',
-  name: 'Counter',
-  getComponent(location, cb) {
-    require.ensure([], require => cb(null, require('./Counter').default), 'counter')
-  }
-}
-
 const staff = {
   path: 'staff',
   getComponent(location, cb) {
@@ -51,7 +43,6 @@ export default {
       component: department,
       isIndex: true
     },
-    counter,
     staff,
     department,
     position,
